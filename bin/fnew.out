@@ -1,0 +1,172 @@
+
+ *******************************************************************************
+
+         NASA-GLENN CHEMICAL EQUILIBRIUM PROGRAM CEA, OCTOBER 18, 2002
+                   BY  BONNIE MCBRIDE AND SANFORD GORDON
+      REFS: NASA RP-1311, PART I, 1994 AND NASA RP-1311, PART II, 1996
+
+ *******************************************************************************
+
+
+
+ reac
+   fuel N2H4(L)  t(k)=298.15 N 2 H 4
+   oxid N2O4(L)  t(k)=298.15 N 2 O 4
+  
+ prob case=N2O4 / N2H4
+      rocket equil o/f=1.4135 p,psia=1000.0,
+      pi/p=68.0457, supar=40.0,60,80,100
+  
+  WARNING!!  DID NOT RECOGNIZE /               (INPUT)
+
+  WARNING!!  DID NOT RECOGNIZE N2H4            (INPUT)
+
+ outp   calories
+  
+ end
+
+ OPTIONS: TP=F  HP=F  SP=F  TV=F  UV=F  SV=F  DETN=F  SHOCK=F  REFL=F  INCD=F
+ RKT=T  FROZ=F  EQL=T  IONS=F  SIUNIT=F  DEBUGF=F  SHKDBG=F  DETDBG=F  TRNSPT=F
+
+ TRACE= 0.00E+00  S/R= 0.000000E+00  H/R= 0.000000E+00  U/R= 0.000000E+00
+
+ Pc,BAR =    68.947304
+
+ Pc/P =    68.0457
+
+ SUBSONIC AREA RATIOS =
+
+ SUPERSONIC AREA RATIOS =    40.0000    60.0000    80.0000   100.0000
+
+ NFZ=  1  Mdot/Ac= 0.000000E+00  Ac/At= 0.000000E+00
+
+ WARNING!!  AMOUNT MISSING FOR REACTANT  1.
+ PROGRAM SETS WEIGHT PERCENT = 100. (REACT)
+
+ WARNING!!  AMOUNT MISSING FOR REACTANT  2.
+ PROGRAM SETS WEIGHT PERCENT = 100. (REACT)
+
+    REACTANT          WT.FRAC   (ENERGY/R),K   TEMP,K  DENSITY
+        EXPLODED FORMULA
+ F: N2H4(L)          1.000000   0.605929E+04   298.15  0.0000
+          N  2.00000  H  4.00000
+ O: N2O4(L)          1.000000  -0.211065E+04   298.15  0.0000
+          N  2.00000  O  4.00000
+
+  SPECIES BEING CONSIDERED IN THIS SYSTEM
+ (CONDENSED PHASE MAY HAVE NAME LISTED SEVERAL TIMES)
+  LAST thermo.inp UPDATE:    9/09/04
+
+  g 6/97  *H               g10/01  HNO              tpis89  HNO2           
+  g 5/99  HNO3             g 4/02  HO2              tpis78  *H2            
+  g 8/89  H2O              g 6/99  H2O2             g 5/97  *N             
+  g 4/99  *NH              g 3/01  NH2              tpis89  NH3            
+  tpis89  NH2OH            tpis89  *NO              g 4/99  NO2            
+  j12/64  NO3              tpis78  *N2              g 5/99  N2H2           
+  tpis89  NH2NO2           g 4/99  N2H4             g 4/99  N2O            
+  g 4/99  N2O3             tpis89  N2O4             g 4/99  N2O5           
+  tpis89  N3               g 4/99  N3H              g 5/97  *O             
+  g 4/02  *OH              tpis89  *O2              g 8/01  O3             
+  g11/99  H2O(cr)          g 8/01  H2O(L)           g 8/01  H2O(L)         
+
+ O/F =   1.413500
+
+                       EFFECTIVE FUEL     EFFECTIVE OXIDANT        MIXTURE
+ ENTHALPY                  h(2)/R              h(1)/R               h0/R
+ (KG-MOL)(K)/KG        0.18908586E+03     -0.22939078E+02      0.64910493E+02
+
+ KG-FORM.WT./KG             bi(2)               bi(1)               b0i
+  *N                   0.62411921E-01      0.21736532E-01      0.38589811E-01
+  *H                   0.12482384E+00      0.00000000E+00      0.51719015E-01
+  *O                   0.00000000E+00      0.43473063E-01      0.25460607E-01
+
+ POINT ITN      T            N           H           O 
+   1   13    3259.834     -12.682      -9.901     -15.468
+ Pinf/Pt = 1.740114
+   2    4    3063.865     -12.836     -10.160     -15.709
+ Pinf/Pt = 1.740731
+   2    2    3063.742     -12.837     -10.160     -15.709
+   3    5    1821.138     -13.733     -11.942     -19.714
+   4    4    1200.889     -14.143     -12.394     -27.553
+   4    2    1228.585     -14.121     -12.370     -27.025
+   5    3    1120.220     -14.210     -12.465     -29.245
+   5    2    1094.320     -14.232     -12.489     -29.843
+   6    3     981.853     -14.337     -12.599     -32.815
+   6    2    1005.714     -14.314     -12.574     -32.127
+   7    3     963.767     -14.355     -12.618     -33.359
+   7    2     940.639     -14.379     -12.642     -34.086
+
+
+
+
+
+              THEORETICAL ROCKET PERFORMANCE ASSUMING EQUILIBRIUM
+
+           COMPOSITION DURING EXPANSION FROM INFINITE AREA COMBUSTOR
+
+ Pinj =  1000.0 PSIA
+ CASE = N2O4           
+
+             REACTANT                    WT FRACTION      ENERGY      TEMP
+                                          (SEE NOTE)      CAL/MOL       K  
+ FUEL        N2H4(L)                      1.0000000     12041.109    298.150
+ OXIDANT     N2O4(L)                      1.0000000     -4194.312    298.150
+
+ O/F=    1.41350  %FUEL= 41.433603  R,EQ.RATIO= 1.015667  PHI,EQ.RATIO= 1.015667
+
+                 CHAMBER   THROAT     EXIT     EXIT     EXIT     EXIT     EXIT
+ Pinf/P            1.0000   1.7407   68.046   495.43   853.05  1254.73  1693.22
+ P, ATM            68.046   39.090   1.0000  0.13735  0.07977  0.05423  0.04019
+ T, K             3259.83  3063.74  1821.14  1228.59  1094.32  1005.71   940.64
+ RHO, G/CC       5.4047-3 3.3360-3 1.4817-4 3.0171-5 1.9673-5 1.4553-5 1.1530-5
+ H, CAL/G          128.99  -34.094  -847.94 -1117.14 -1173.73 -1210.07 -1236.23
+ U, CAL/G         -175.91  -317.86 -1011.38 -1227.39 -1271.92 -1300.31 -1320.64
+ G, CAL/G        -9038.72 -8650.33 -5969.57 -4572.32 -4251.31 -4038.46 -3881.61
+ S, CAL/(G)(K)     2.8123   2.8123   2.8123   2.8123   2.8123   2.8123   2.8123
+
+ M, (1/n)          21.246   21.455   22.143   22.146   22.146   22.146   22.146
+ (dLV/dLP)t      -1.01580 -1.01224 -1.00008 -1.00000 -1.00000 -1.00000 -1.00000
+ (dLV/dLT)p        1.3094   1.2558   1.0031   1.0000   1.0000   1.0000   1.0000
+ Cp, CAL/(G)(K)    1.1049   1.0269   0.4841   0.4280   0.4147   0.4055   0.3986
+ GAMMAs            1.1486   1.1494   1.2291   1.2652   1.2761   1.2841   1.2905
+ SON VEL,M/SEC     1210.5   1168.2    916.8    763.9    724.1    696.3    675.1
+ MACH NUMBER        0.000    1.000    3.119    4.227    4.560    4.807    5.007
+
+ PERFORMANCE PARAMETERS
+
+ Ae/At                      1.0000   9.1988   40.000   60.000   80.000   100.00
+ CSTAR, FT/SEC              5804.4   5804.4   5804.4   5804.4   5804.4   5804.4
+ CF                         0.6603   1.6161   1.8253   1.8662   1.8921   1.9105
+ Ivac,LB-SEC/LB              222.8    315.9    343.9    349.4    352.8    355.3
+ Isp, LB-SEC/LB              119.1    291.6    329.3    336.7    341.3    344.7
+
+
+ MOLE FRACTIONS
+
+ *H               0.00936  0.00652  0.00004  0.00000  0.00000  0.00000  0.00000
+ HNO              0.00001  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+ HO2              0.00004  0.00003  0.00000  0.00000  0.00000  0.00000  0.00000
+ *H2              0.05547  0.04594  0.00898  0.00883  0.00883  0.00883  0.00883
+ H2O              0.47213  0.49242  0.56351  0.56386  0.56386  0.56386  0.56386
+ H2O2             0.00001  0.00001  0.00000  0.00000  0.00000  0.00000  0.00000
+ *NO              0.01024  0.00763  0.00003  0.00000  0.00000  0.00000  0.00000
+ NO2              0.00001  0.00001  0.00000  0.00000  0.00000  0.00000  0.00000
+ *N2              0.40481  0.41015  0.42723  0.42731  0.42731  0.42731  0.42731
+ *O               0.00318  0.00209  0.00000  0.00000  0.00000  0.00000  0.00000
+ *OH              0.03420  0.02636  0.00020  0.00000  0.00000  0.00000  0.00000
+ *O2              0.01053  0.00884  0.00002  0.00000  0.00000  0.00000  0.00000
+
+  * THERMODYNAMIC PROPERTIES FITTED TO 20000.K
+
+    PRODUCTS WHICH WERE CONSIDERED BUT WHOSE MOLE FRACTIONS
+    WERE LESS THAN 5.000000E-06 FOR ALL ASSIGNED CONDITIONS
+
+ HNO2            HNO3            *N              *NH             NH2            
+ NH3             NH2OH           NO3             N2H2            NH2NO2         
+ N2H4            N2O             N2O3            N2O4            N2O5           
+ N3              N3H             O3              H2O(cr)         H2O(L)         
+
+ NOTE. WEIGHT FRACTION OF FUEL IN TOTAL FUELS AND OF OXIDANT IN TOTAL OXIDANTS
+
+
+
