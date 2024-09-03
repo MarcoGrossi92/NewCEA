@@ -1,1 +1,0 @@
-/opt/homebrew/bin/gfortran  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk CMakeFiles/FCEA.dir/src/fortran/main.f90.o CMakeFiles/FCEA.dir/src/fortran/cea.f.o CMakeFiles/FCEA.dir/src/fortran/CEAmod.f90.o -o /Users/marcogrossi/Codici/myCEA/pyCEA/bin/FCEA 

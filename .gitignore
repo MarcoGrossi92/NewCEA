@@ -1,0 +1,20 @@
+# Compiling files
+error_messages
+build
+Makefile
+*.o
+*.obj
+
+# Precompiling tools
+.setvars.sh
+
+# Compiled Object files
+obj
+*.obj
+
+# Fortran module files
+*.mod
+
+# Executables
+bin
+*.exe
