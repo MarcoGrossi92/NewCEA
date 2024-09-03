@@ -1,6 +1,7 @@
 # Compiling files
 error_messages
 build
+bin
 Makefile
 *.o
 *.obj

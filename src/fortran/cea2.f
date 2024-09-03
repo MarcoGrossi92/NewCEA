@@ -101,36 +101,71 @@ C            IF(ipp.LE.Npp)ipp=ipp-1 to IF(ipp.LT.Npp.OR.Npp.EQ.4) ...
 C 02/05/04 - Chg. numbered ENDDO's to CONTINUE's for Watson compiler.
 C 05/21/04 - Added labels to columns in .plt file
 C***********************************************************************
+      subroutine cea2( libpath, prefix, myfile, section)
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
+      CHARACTER(*) libpath, prefix, myfile
+      INTEGER section
 C LOCAL VARIABLES
       CHARACTER*15 ensert(20)
       CHARACTER*200 infile,ofile
-      CHARACTER*196 prefix
       LOGICAL caseok,ex,readok
       INTEGER i,inc,iof,j,ln,n
-      INTEGER INDEX
+c///      INTEGER INDEX
       REAL*8 xi,xln
       REAL*8 DLOG
-      SAVE caseok,ensert,ex,i,inc,infile,iof,j,ln,n,ofile,prefix,readok,
-     &  xi,xln
+c///      SAVE caseok,ensert,ex,i,inc,infile,iof,j,ln,n,ofile,prefix,readok,
+c///     &  xi,xln
+      Fmt(1)  = '(1X'
+      Fmt(2)  = ',A15'
+      Fmt(3)  = ','
+      Fmt(4)  = 'F9.'
+      Fmt(5)  = '0,'
+      Fmt(6)  = 'F9.'
+      Fmt(7)  = '0,'
+      Fmt(8)  = 'F9.'
+      Fmt(9)  = '0,'
+      Fmt(10) = 'F9.'
+      Fmt(11) = '0,'
+      Fmt(12) = 'F9.'
+      Fmt(13) = '0,'
+      Fmt(14) = 'F9.'
+      Fmt(15) = '0,'
+      Fmt(16) = 'F9.'
+      Fmt(17) = '0,'
+      Fmt(18) = 'F9.'
+      Fmt(19) = '0,'
+      Fmt(20) = 'F9.'
+      Fmt(21) = '0,'
+      Fmt(22) = 'F9.'
+      Fmt(23) = '0,'
+      Fmt(24) = 'F9.'
+      Fmt(25) = '0,'
+      Fmt(26) = 'F9.'
+      Fmt(27) = '0,'
+      Fmt(28) = 'F9.'
+      Fmt(29) = '0'
+      Fmt(30) = ')'
+
+      gsection = section
 C
-      WRITE (*,99001)
-      READ (*,99002) prefix
+
+C      WRITE (*,99001)
+C      READ (*,99002) prefix
       ln = INDEX(prefix,' ') - 1
-      infile = prefix(1:ln)//'.inp'
-      ofile = prefix(1:ln)//'.out'
-      Pfile = prefix(1:ln)//'.plt'
+      infile = trim(adjustl(prefix))//'/'//trim(adjustl(myfile))//'.inp'
+      ofile = trim(adjustl(prefix))//'/'//trim(adjustl(myfile))//'.out'
+      Pfile = trim(adjustl(prefix))//'/'//trim(adjustl(myfile))//'.plt'
       INQUIRE (FILE=infile,EXIST=ex)
       IF ( .NOT.ex ) THEN
-        PRINT *,infile,' DOES NOT EXIST'
+        WRITE(*,*)infile,' DOES NOT EXIST'
         GOTO 400
       ENDIF
       OPEN (IOINP,FILE=infile,STATUS='old',FORM='formatted')
       OPEN (IOOUT,FILE=ofile,STATUS='unknown',FORM='formatted')
       OPEN (IOSCH,STATUS='scratch',FORM='unformatted')
-      OPEN (IOTHM,FILE='thermo.lib',FORM='unformatted')
-      OPEN (IOTRN,FILE='trans.lib',FORM='unformatted')
+      OPEN (IOTHM,FILE=trim(libpath)//'thermo.lib',FORM='unformatted')
+      OPEN (IOTRN,FILE=trim(libpath)//'trans.lib',FORM='unformatted')
       WRITE (IOOUT,99006)
       WRITE (IOOUT,99007)
       WRITE (IOOUT,99006)
@@ -242,70 +277,14 @@ C INITIAL ESTIMATES
      &        ' AND NASA RP-1311, PART II, 1996')
 99008 FORMAT (/,'OXIDANT NOT PERMITTED WHEN SPECIFYING 100% FUEL(main)')
 99009 FORMAT ('#',2x,20A12)
-      END
-      BLOCKDATA 
-C***********************************************************************
-C FUNDAMENTAL CONSTANTS FROM:  COHEN,E.RICHARD & TAYLOR,BARRY N.,
-C THE 1986 CODATA RECOMMENDED VALUES OF THE FUNDAMENTAL PHYSICAL
-C CONSTANTS, J.PHYS.CHEM.REF.DATA, VOL.17, NO.4, 1988, PP 1795-1803.
-C***********************************************************************
-      IMPLICIT NONE
-      INCLUDE 'cea.inc'
-C
-      DATA Rr/8314.51D0/,Pi/3.14159265D0/,Avgdr/6.0221367D0/,
-     &     Boltz/1.380658D0/
-C ATOMIC SYMBOLS
-      DATA Symbol/'H ','D ','HE','LI','BE','B ','C ','N ','O ','F ',
-     &     'NE','NA','MG','AL','SI','P ','S ','CL','AR','K ','CA','SC',
-     &     'TI','V ','CR','MN','FE','CO','NI','CU','ZN','GA','GE','AS',
-     &     'SE','BR','KR','RB','SR','Y ','ZR','NB','MO','TC','RU','RH',
-     &     'PD','AG','CD','IN','SN','SB','TE','I ','XE','CS','BA','LA',
-     &     'CE','PR','ND','PM','SM','EU','GD','TB','DY','HO','ER','TM',
-     &     'YB','LU','HF','TA','W ','RE','OS','IR','PT','AU','HG','TL',
-     &     'PB','BI','PO','AT','RN','FR','RA','AC','TH','PA','U ','NP',
-     &     'PU','AM','CM','BK','CF','ES'/
-C
-C  ATOMIC WEIGHTS - Coplen,T.B., Atomic Weights of the Elements 1999. 
-C     J.Phys.Chem.Ref.Data, vol.30, no.3, 2001, pp.701-712.
-C
-      DATA atmwt/               1.00794D0,2.014102D0,4.002602D0,6.941D0,
-     1 9.012182D0,10.811D0,12.0107D0,14.0067D0,15.9994D0,18.9984032D0,
-     2 20.1797D0,22.989770D0,24.305D0,26.981538D0,28.0855D0,30.973761D0,
-     3 32.065D0,35.453D0,39.948D0,39.0983D0,40.078D0,44.95591D0,
-     4 47.867D0, 50.9415D0,51.9961D0,54.938049D0,
-     5 55.845D0,58.933200D0,58.6934D0,63.546D0,65.39D0,69.723D0,72.64D0,
-     6 74.92160D0,78.96D0,79.904D0,83.80D0,85.4678D0,87.62D0,88.90585D0,
-     7 91.224D0,92.90638D0,95.94D0,97.9072D0,101.07D0,102.9055D0,
-     $ 106.42D0,
-     8 107.8682D0,112.411D0,114.818D0,118.710D0, 121.760D0,127.6D0,
-     9 126.90447D0,131.293D0,132.90545D0,137.327D0,138.9055D0,140.116D0,
-     $ 140.90765D0,144.9127D0,145.D0,150.36D0,151.964D0,157.25D0,
-     $ 158.92534D0,
-     $ 162.50D0,164.93032D0,167.259D0,168.93421D0,173.04D0,174.967D0,
-     $ 178.49D0,180.9479D0,183.84D0,186.207D0,190.23D0,192.217D0,
-     $ 195.078D0,196.96655D0,200.59D0,204.3833D0,207.2D0,208.98038D0,
-     $ 208.9824D0, 209.9871D0,
-     $ 222.0176D0,223.0197D0,226.0254D0,227.0278D0,232.0381D0,
-     $ 231.03588D0,238.02891D0,237.0482D0,244.0642D0,243.0614D0,
-     $ 247.0703D0,247.0703D0,251.0587D0,252.083D0/
-C ATOMIC VALENCES
-      DATA Valnce/1.,1.,0.,1.,2.,3.,4.,0., - 2., - 1.,0.,1.,2.,3.,4.,5.,
-     &     4., - 1.,0.,1.,2.,3.,4.,5.,3.,2.,3.,2.,2.,2.,2.,3.,4.,3.,4.,
-     &     - 1.,0.,1.,2.,3.,4.,5.,6.,7.,3.,3.,2.,1.,2.,3.,4.,3.,4.,
-     &     - 1.,0.,1.,2.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,
-     &     4.,5.,6.,7.,4.,4.,4.,3.,2.,1.,2.,3.,2., - 1.,0.,1.,2.,3.,4.,
-     &     5.,6.,5.,4.,3.,3.,3.,3.,3./
-C INFORMATION USED IN VARIABLE OUTPUT FORMAT
-      DATA Fmt/'(1X',',A15',',','F9.','0,','F9.','0,','F9.','0,','F9.',
-     &     '0,','F9.','0,','F9.','0,','F9.','0,','F9.','0,','F9.','0,',
-     &     'F9.','0,','F9.','0,','F9.','0,','F9.','0',')'/
-      END
+      END subroutine
+      
       SUBROUTINE CPHS
 C***********************************************************************
 C CALCULATES THERMODYNAMIC PROPERTIES FOR INDIVIDUAL SPECIES
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       REAL*8 cx(7),hcx(7),scx(7)
       INTEGER i,ij,j,jj,k
@@ -408,8 +387,8 @@ C
 C***********************************************************************
 C CHAPMAN-JOUGUET DETONATIONS.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*15 fdv,fg1,fh1,fhs1,fm1,fmm1,fpp1,frr1,ft1,ftt1
       CHARACTER*3 unit
@@ -664,8 +643,8 @@ c     Iplt = MIN(Iplt+Npt,500)
 C***********************************************************************
 C WRITE OUTPUT RECORD WITH NUMERICAL VALUES IN SPECIAL EXPONENT FORM.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C DUMMY ARGUMENTS
       CHARACTER*15 Aa
       CHARACTER*4 Fone
@@ -710,8 +689,8 @@ C
 C***********************************************************************
 C CALCULATE EQUILIBRIUM COMPOSITION AND PROPERTIES.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*12 ae,cmp(MAXEL)
       CHARACTER*16 amb
@@ -1665,8 +1644,8 @@ C***********************************************************************
 C CALCULATE PROPERTIES WITH FROZEN COMPOSITION AT ASSIGNED ENTROPY
 C AND PRESSURE.  CALLED FROM ROCKET.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER i,inc,iter,j,k,nnn
       REAL*8 DABS,DEXP,DLOG
@@ -1741,8 +1720,8 @@ C***********************************************************************
 C SOLVE ANY LINEAR SET OF UP TO MAXMAT EQUATIONS
 C NUMBER OF EQUATIONS = IMAT
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER i,imatp1,j,k,nn,nnp1
       REAL*8 bigno,coefx(50),tmp
@@ -1837,8 +1816,8 @@ C***********************************************************************
 C CALCULATE PROPERTIES FOR TOTAL REACTANT USING THERMO DATA FOR
 C ONE OR MORE REACTANTS. USED ONLY FOR SHOCK AND DETON PROBLEMS.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*6 date(MAXNGC)
       CHARACTER*2 el(5)
@@ -1985,8 +1964,8 @@ C   DPIN - NUMERICS AS DOUBLE PRECISION VARIABLE.
 C   CNUM - CHARACTER STRING REPRESENTING DATASET NUMBERS. MAXIMUM 24
 C          CHARACTERS.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C DUMMY ARGUMENTS
       CHARACTER*15 Cin(MAXNGC)
       INTEGER Ncin
@@ -2119,8 +2098,8 @@ C INTERNAL READ TO CONVERT TO NUMERIC
 C***********************************************************************
 C DECIPHER KEYWORDS, LITERAL VARIABLES, & NUMERICAL VARIABLES IN INPUT.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C DUMMY ARGUMENTS
       LOGICAL Caseok,Readok
       CHARACTER*15 Ensert(20)
@@ -2796,8 +2775,8 @@ c end mod.
 C***********************************************************************
 C SET UP ITERATION OR DERIVATIVE MATRIX.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER i,iq,iq2,iq3,isym,j,k,kk,kmat
       REAL*8 energyl,f,h,ss,sss,term,term1
@@ -2938,8 +2917,8 @@ CDIR$ IVDEP
 C***********************************************************************
 C CALCULATE NEW VALUES OF B0 AND HSUB0 FOR NEW OF RATIO
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER i,j
       REAL*8 assval,bigb,bratio,dbi,smalb,tem,v1,v2
@@ -3012,8 +2991,8 @@ C ENTRY OUT4 WRITES TRANSPORT PROPERTIES.
 C
 C NOTE - ROCKET, SHOCK, AND DETON PROBLEMS HAVE ADDITIONAL OUTPUT.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*15 fc,fgi,fh,fp,frh,fs,fu
       CHARACTER*4 mamo
@@ -3199,11 +3178,13 @@ C PRESSURE
         ENDIF
       ENDDO
       WRITE (IOOUT,Fmt) fp,(X(j),j=1,Npt)
+      print*, 'p',X(gsection)
 C TEMPERATURE
       Fmt(4) = '13'
       Fmt(5) = ' '
       Fmt(7) = '2,'
       WRITE (IOOUT,Fmt) 'T, K            ',(Ttt(j),j=1,Npt)
+      print*, 'T',Ttt(gsection)
 C DENSITY
       DO i = 1,Npt
         IF ( Vlm(i).NE.0. ) X(i) = vnum/Vlm(i)
@@ -3211,6 +3192,7 @@ C DENSITY
      &       Pltout(i+Iplt-ione,mrho) = X(i)
       ENDDO
       CALL EFMT(Fmt(4),frh,X)
+      print*, 'rho',X(gsection)
 C ENTHALPY
       DO i = 1,Npt
         X(i) = Hsum(i)*R
@@ -3220,6 +3202,7 @@ C ENTHALPY
       Fmt(4) = Fmt(6)
       CALL VARFMT(X)
       WRITE (IOOUT,Fmt) fh,(X(j),j=1,Npt)
+      print*, 'h',x(gsection)
 C INTERNAL ENERGY
       DO i = 1,Npt
         X(i) = (Hsum(i)-Ppp(i)*Vlm(i)/Rr)*R
@@ -3255,6 +3238,7 @@ C MOLECULAR WEIGHT
       WRITE (IOOUT,Fmt) 'M, (1/n)        ',(Wm(j),j=1,Npt)
       IF ( .NOT.Gonly ) WRITE (IOOUT,Fmt) 'MW, MOL WT      ',
      &                                (1.D0/Totn(j),j=1,Npt)
+      print*,'w',wm(gsection)
 C (DLV/DLP)T
       Fmt(7) = '5,'
       IF ( Eql ) WRITE (IOOUT,Fmt) '(dLV/dLP)t      ',(Dlvpt(j),j=1,Npt)
@@ -3274,6 +3258,7 @@ C SONIC VELOCITY
      &       Pltout(i+Iplt-ione,mson) = Sonvel(i)
       ENDDO
       WRITE (IOOUT,Fmt) 'SON VEL,M/SEC   ',(Sonvel(j),j=1,Npt)
+      print*,'a',Sonvel(gsection)
       RETURN
 C***********************************************************************
       ENTRY OUT3
@@ -3324,6 +3309,7 @@ C MASS OR MOLE FRACTIONS
 c mod. by Daniele Bianchi 17/11/06
 c            IF ( Trace.EQ.0. ) THEN
               WRITE (IOOUT,99011) Prod(k),(X(i),i=1,Npt)
+              print*, 'eq-frac',Prod(k),x(gsection)
 c            ELSE
 c              CALL EFMT(Fmt(4),Prod(k),X)
 c            ENDIF
@@ -3419,8 +3405,8 @@ c end mod.
 C***********************************************************************
 C READ AND PROCESS REACTANT RECORDS.  CALLED FROM SUBROUTINE INPUT.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*6 date
       CHARACTER*2 el(5)
@@ -3689,17 +3675,17 @@ C CALCULATE V+(KR), AND V-(KR)
 C***********************************************************************
 C SPECIAL OUTPUT FOR ROCKET PROBLEMS.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*4 exit(11)
       CHARACTER*15 fi,fiv,fr,z(4)
       INTEGER i,i23,i46,i57,i68,i79,ione,ixfr,ixfz,j,k,line,ln,mae,mcf,
      &        misp,mivac,mmach,mppf,mppj,mxx(8),nex
-      INTEGER INDEX
-      REAL*8 agv,aw,gc,tem,tra,vaci(NCOL),ww
+c///      INTEGER INDEX
+      REAL*8 agv,aw,gc,tem,tra,ww
       SAVE agv,aw,fi,fiv,fr,gc,i,i23,i46,i57,i68,i79,ione,ixfr,ixfz,j,k,
-     &  line,ln,mae,mcf,misp,mivac,mmach,mppf,mppj,mxx,nex,tem,tra,vaci,
+     &  line,ln,mae,mcf,misp,mivac,mmach,mppf,mppj,mxx,nex,tem,tra,
      &  ww,z
 C
       EQUIVALENCE (mxx(1),mppf)
@@ -3811,6 +3797,7 @@ C MACH NUMBER
       IF ( Gammas(i23).EQ.0. ) Vmoc(i23) = 0.
       Fmt(7) = '3,'
       WRITE (IOOUT,Fmt) 'MACH NUMBER    ',(Vmoc(j),j=1,Npt)
+      print*, 'mach',Vmoc(gsection)
       IF ( Trnspt ) CALL OUT4
       WRITE (IOOUT,99013)
 C AREA RATIO
@@ -3825,16 +3812,19 @@ C C*
       Fmt(i68) = Fmt(i68+2)
       Fmt(i79) = '1,'
       WRITE (IOOUT,Fmt) fr,(Cstr,j=2,Npt)
+      print*,'cstar',cstr
 C CF - THRUST COEFICIENT
       Fmt(i79) = '4,'
       DO i = 2,Npt
         X(i) = gc*Spim(i)/Cstr
       ENDDO
       WRITE (IOOUT,Fmt) 'CF             ',(X(j),j=2,Npt)
+      print*,'CF',x(gsection)
 C VACUUM IMPULSE
       Fmt(i57) = '13'
       Fmt(i79) = '1,'
       WRITE (IOOUT,Fmt) fiv,(vaci(j),j=2,Npt)
+      print*,'ivac', vaci(gsection)
 C SPECIFIC IMPULSE
       WRITE (IOOUT,Fmt) fi,(Spim(j),j=2,Npt)
       IF ( Nplt.GT.0 ) THEN
@@ -3913,8 +3903,8 @@ C MOLE (OR MASS) FRACTIONS - FROZEN
 C***********************************************************************
 C EXECUTIVE ROUTINE FOR ROCKET PROBLEMS.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER i,i01,i12,iof,iplt1,iplte,ipp,isub,isup1,isupsv,itnum,
      &        itrot,nar,nipp,niter,nn,npr1,nptth
@@ -4507,8 +4497,8 @@ C 3) O/F VALUES(IOF = NOF)
 C***********************************************************************
 C SEARCH THERMO.LIB FOR THERMO DATA FOR SPECIES TO BE CONSIDERED.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*16 bin(2,40),pure(6),spece(2)
       CHARACTER*6 date(MAXNGC)
@@ -4753,8 +4743,8 @@ C  ISV<0  SAVE COMPOSITIONS FROM POINT -ISV FOR POSSIBLE LATER USE.
 C         ALSO USE COMPOSITIONS FROM POINT -ISV FOR NPT.
 C  ISV=0  USE COMPOSITIONS SAVED WHEN ISV<0.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER j,lsav
       REAL*8 tsave
@@ -4826,8 +4816,8 @@ C USE COMPOSITIONS FROM PREVIOUS POINT
 C***********************************************************************
 C PRIMARY ROUTINE FOR SHOCK PROBLEMS.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       CHARACTER*1 cr12,cr52
       INTEGER i,iof,it1,it2,itr,j,n
@@ -5231,16 +5221,16 @@ C WRITE FROZEN MOLE (OR MASS) FRACTIONS
 C***********************************************************************
 C ASSIGNED THERMODYNAMIC STATES.  HP,SP,TP,UV,SV, AND TV PROBLEMS.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER iof
-      LOGICAL uv,tv,sv
+c      LOGICAL uv,tv,sv
       SAVE iof
 C
-      EQUIVALENCE (Hp,Uv)
-      EQUIVALENCE (Tp,Tv)
-      EQUIVALENCE (Sp,Sv)
+c      EQUIVALENCE (Hp,Uv)
+c      EQUIVALENCE (Tp,Tv)
+c      EQUIVALENCE (Sp,Sv)
       Eql = .TRUE.
       DO 100 iof = 1,Nof
         Oxfl = Oxf(iof)
@@ -5267,9 +5257,9 @@ C SET ASSIGNED T
               IF ( Tp ) WRITE (IOOUT,99007)
               IF ( Sp ) WRITE (IOOUT,99008)
             ELSE
-              IF ( Uv ) WRITE (IOOUT,99003)
-              IF ( Tv ) WRITE (IOOUT,99004)
-              IF ( Sv ) WRITE (IOOUT,99005)
+              IF ( HP ) WRITE (IOOUT,99003)
+              IF ( TP ) WRITE (IOOUT,99004)
+              IF ( Sp ) WRITE (IOOUT,99005)
             ENDIF
             CALL OUT1
             WRITE (IOOUT,99009)
@@ -5310,8 +5300,8 @@ C SET ASSIGNED T
 C***********************************************************************
 C BRINGS IN AND SORTS OUT INPUT FOR TRANSPORT CALCULATIONS
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER i,ii,inds(MAXTR),ir,j,jtape(2),k,k1,k2,kt,kvc,l,loop,m,nms
       LOGICAL change,elc1,elc2,ion1,ion2,setx
@@ -5593,8 +5583,8 @@ C   NUMBER OF GASEOUS SPECIES = NM   (MAXIMUM MAXTR)
 C   NUMBER OF CHEMICAL REACTIONS = NR (NM - NLM)
 C   ARRAY OF STOICHIOMETRIC COEFFICIENTS = STC
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C LOCAL VARIABLES
       INTEGER i,i1,j,jj,k,m,mm,nlmm,nmm
       REAL*8 cpreac,delh(MAXTR),gmat(MAXMAT,MAXMAT+1),phi(MAXTR,MAXTR),
@@ -5796,8 +5786,8 @@ C           STARTING WITH 1 FOR THE LOWEST T RANGE, 2 FOR THE NEXT
 C           CONTIGUOUS PHASE, ETC.
 C NTL     - NUMBER OF T INTERVALS FOR A SPECIES SET.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C DUMMY ARGUMENTS
       LOGICAL Readok
 C LOCAL VARIABLES
@@ -6012,8 +6002,8 @@ C
 C NOTE:  THIS ROUTINE MAY BE CALLED DIRECTLY  AND USED BY ITSELF TO
 C PROCESS THE TRANSPORT PROPERTY DATA.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C DUMMY ARGUMENTS
       LOGICAL Readok
 C LOCAL VARIABLES
@@ -6076,8 +6066,8 @@ C***********************************************************************
 C SET DECIMAL PLACES ACCORDING TO NUMBER SIZE FOR F-FORMAT IN
 C VARIABLE FORMAT FMT.
 C***********************************************************************
+      use CEAinc
       IMPLICIT NONE
-      INCLUDE 'cea.inc'
 C DUMMY ARGUMENTS
       REAL*8 Vx(NCOL)
 C LOCAL VARIABLES

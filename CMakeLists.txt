@@ -2,4 +2,4 @@
 set(CMAKE_Fortran_COMPILER "gfortran")
 project (CEA LANGUAGES Fortran)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/)
-add_executable(FCEA "src/fortran/main.f90" "src/fortran/cea.f" "src/fortran/CEAmod.f90")
+add_executable(FCEA2 "src/fortran/main.f90" "src/fortran/cea2.f" "src/fortran/CEAinc.f90")
