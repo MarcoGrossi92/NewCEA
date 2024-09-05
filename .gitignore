@@ -1,10 +1,6 @@
 # Compiling files
-error_messages
 build
 bin
-Makefile
-*.o
-*.obj
 
 # Precompiling tools
 .setvars.sh
@@ -15,6 +11,9 @@ obj
 
 # Fortran module files
 *.mod
+
+# Compiled libraries
+*.so
 
 # Executables
 bin

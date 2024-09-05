@@ -8,8 +8,13 @@ MODULE CEAinc
 
   IMPLICIT NONE
 
-  ! IN-OUT var
+  ! IN-OUT variables
   INTEGER :: gsection
+  REAL*8 :: state(2,6)
+  REAL*8 :: perfo(2,3)
+  INTEGER :: nspec
+  REAL*8, ALLOCATABLE :: spec_frac(:)
+  CHARACTER*20, ALLOCATABLE :: spec_name(:)
 
   ! Define module constants using PARAMETER
   INTEGER, PARAMETER :: MAXNGC = 600
@@ -30,8 +35,6 @@ MODULE CEAinc
   INTEGER, PARAMETER :: IOPLT = 15
   INTEGER, PARAMETER :: IOTRN = 18
 
-  INTEGER :: makeio
-
   REAL(8) :: Enn, Ennl, Enlsav, Ensave, Sumn
   REAL(8) :: Deln(MAXNGC), Enln(MAXNGC), Sln(MAXNGC)
   REAL(8) :: En(MAXNGC, NCOL)
@@ -45,7 +48,7 @@ MODULE CEAinc
 
   ! ATOMIC WEIGHTS - Coplen,T.B., Atomic Weights of the Elements 1999. 
   !   J.Phys.Chem.Ref.Data, vol.30, no.3, 2001, pp.701-712.
-  REAL(8), PARAMETER :: Atmwt(100) = [1.00794D0,2.014102D0,4.002602D0,6.941D0,&
+  REAL(8), PARAMETER :: Atmwt(100) = (/1.00794D0,2.014102D0,4.002602D0,6.941D0,&
      9.012182D0,10.811D0,12.0107D0,14.0067D0,15.9994D0,18.9984032D0,&
      20.1797D0,22.989770D0,24.305D0,26.981538D0,28.0855D0,30.973761D0,&
      32.065D0,35.453D0,39.948D0,39.0983D0,40.078D0,44.95591D0,&
@@ -64,17 +67,17 @@ MODULE CEAinc
      208.9824D0, 209.9871D0,&
      222.0176D0,223.0197D0,226.0254D0,227.0278D0,232.0381D0,&
      231.03588D0,238.02891D0,237.0482D0,244.0642D0,243.0614D0,&
-     247.0703D0,247.0703D0,251.0587D0,252.083D0]
+     247.0703D0,247.0703D0,251.0587D0,252.083D0/)
   
   REAL(8) :: Oxf(MAXMIX), P(MAXPV), Rh(2), T(MAXT)
   REAL(8) :: V(MAXPV)
   
-  REAL(8), PARAMETER :: Valnce(100) = [1.,1.,0.,1.,2.,3.,4.,0., - 2., - 1.,0.,1.,2.,3.,4.,5.,&
+  REAL(8), PARAMETER :: Valnce(100) = (/1.,1.,0.,1.,2.,3.,4.,0., - 2., - 1.,0.,1.,2.,3.,4.,5.,&
           4., - 1.,0.,1.,2.,3.,4.,5.,3.,2.,3.,2.,2.,2.,2.,3.,4.,3.,4.,&
           - 1.,0.,1.,2.,3.,4.,5.,6.,7.,3.,3.,2.,1.,2.,3.,4.,3.,4.,&
           - 1.,0.,1.,2.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,3.,&
           4.,5.,6.,7.,4.,4.,4.,3.,2.,1.,2.,3.,2., - 1.,0.,1.,2.,3.,4.,&
-          5.,6.,5.,4.,3.,3.,3.,3.,3.]
+          5.,6.,5.,4.,3.,3.,3.,3.,3./)
 
   REAL(8) :: B0p(MAXEL, 2)
 
@@ -91,7 +94,7 @@ MODULE CEAinc
   CHARACTER(2) :: Elmt(MAXEL)
   CHARACTER(2) :: Ratom(MAXR, 12)
 
-  CHARACTER(2), PARAMETER :: Symbol(100) = ['H ','D ','HE','LI','BE','B ','C ','N ','O ','F ', &
+  CHARACTER(2), PARAMETER :: Symbol(100) = (/'H ','D ','HE','LI','BE','B ','C ','N ','O ','F ', &
           'NE','NA','MG','AL','SI','P ','S ','CL','AR','K ','CA','SC', &
           'TI','V ','CR','MN','FE','CO','NI','CU','ZN','GA','GE','AS', &
           'SE','BR','KR','RB','SR','Y ','ZR','NB','MO','TC','RU','RH', &
@@ -99,7 +102,7 @@ MODULE CEAinc
           'CE','PR','ND','PM','SM','EU','GD','TB','DY','HO','ER','TM', &
           'YB','LU','HF','TA','W ','RE','OS','IR','PT','AU','HG','TL', &
           'PB','BI','PO','AT','RN','FR','RA','AC','TH','PA','U ','NP', &
-          'PU','AM','CM','BK','CF','ES']
+          'PU','AM','CM','BK','CF','ES'/)
 
   CHARACTER(4) :: Fmt(30)
 
