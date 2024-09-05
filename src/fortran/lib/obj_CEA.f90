@@ -52,23 +52,27 @@ module CEAbox
 
   contains
 
+  function libpath() result(result)
+    implicit none
+    character(len=500) :: result
+    character(len=500) :: masterpath
+
+    ! Assign correct path depending on ENV variable
+    call get_environment_variable('NewCEADIR',masterpath)
+    result = trim(masterpath)//'/lib/thermo-transport/'
+
+  end function libpath
+
   subroutine solve(self,filename)
     implicit none
     class(obj_CEA), intent(inout) :: self
     character(*), intent(inout) :: filename
     external :: cea2
-    character(200) :: libpath
     real(8) :: state(2,6), perfo(2,3)
     real(8) :: spec_frac(600)
     character(20) :: spec_name(600)
 
-    ! Assign correct path depending on ENV variable
-    ! call get_environment_variable('CEADIR',masterpath)
-    ! libpath = masterpath//'/lib/thermo-transport/'
-    libpath = '/Users/marcogrossi/Codici/myCEA/lib/thermo-transport/'
-
-    read(*,*) filename
-    call cea2 (libpath, filename, 1, spec_name, spec_frac, perfo, state)
+    call cea2 (libpath(), filename, self%indx, spec_name, spec_frac, perfo, state)
 
     ! Performance
     self%SE%cstar = perfo(1,1); self%SE%cf = perfo(1,2); self%SE%ivac = perfo(1,3)
