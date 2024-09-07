@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import NewCEA
+import FCEA2
 import sys
 
 masterpath = os.environ.get("NewCEADIR")
@@ -63,7 +63,7 @@ class CEA:
         """
         # Simulate calling an external CEA2 library (e.g. via ctypes, subprocess, or an external Python wrapper)
         # This example assumes the function returns data arrays
-        spec_name, spec_frac, perfo, state = NewCEA.cea2(libpath, filename, self.indx)
+        spec_name, spec_frac, perfo, state = FCEA2.cea2(libpath, filename, self.indx)
         spec_name = [name.decode('utf-8').strip() for name in spec_name]
 
         # Performance data

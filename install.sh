@@ -39,6 +39,7 @@ function usage () {
 function define_path () {
   rm -f .setvars.sh
   echo 'export NewCEADIR='$DIR >> .setvars.sh
+  echo 'export PYTHONPATH='$DIR'/src/python/NewCEA/:$PYTHONPATH' >> .setvars.sh
   if [[ $SHELL == *"zsh"* ]]; then
     RCFILE=$HOME/.zshrc
   elif [[ $SHELL == *"bash"* ]]; then
@@ -60,6 +61,9 @@ function build_project () {
   cd $DIR/build
   cmake .. -DCMAKE_BUILD_TYPE=RELEASE
   cmake --build .
+
+  # python setup.py sdist bdist_wheel
+  # pip install -e .
 }
 
 function compile () {

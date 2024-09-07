@@ -1,7 +1,3 @@
-# Compiling files
-build
-bin
-
 # Precompiling tools
 .setvars.sh
 
@@ -18,3 +14,20 @@ obj
 # Executables
 bin
 *.exe
+
+# Distribution / packaging
+bin/
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
