@@ -205,10 +205,10 @@ module CEAbox
 
   subroutine CEAwrite(CEA,what,ONLYspecies)
     implicit none
-    type(obj_CEA), intent(in):: CEA
+    type(obj_CEA), intent(inout):: CEA
     character(len=*), intent(in):: what
     type(obj_species), optional:: ONLYspecies
-    integer:: i
+    integer:: i, unitfile
 
     if (present(ONLYspecies)) CEA%only = .true.
 

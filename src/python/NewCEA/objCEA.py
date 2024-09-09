@@ -103,7 +103,7 @@ class CEA:
                 ncond += 1
                 yCondP += dummy_fraction[s]
 
-        if ncond > 0:
+        if ncond > 0 and self.OG:
             remaining_species = [
                 (name, fraction / (1 - yCondP)) 
                 for name, fraction in zip(dummy_name, dummy_fraction) 

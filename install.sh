@@ -62,6 +62,11 @@ function build_project () {
   cmake .. -DCMAKE_BUILD_TYPE=RELEASE
   cmake --build .
 
+  cd $DIR
+  cd src/python/NewCEA
+  f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
+  mv FCEA2* FCEA2.so
+
   # python setup.py sdist bdist_wheel
   # pip install -e .
 }
