@@ -67,6 +67,7 @@ function build_project () {
   f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
   mv FCEA2* FCEA2.so
 
+  # cd $DIR
   # python setup.py sdist bdist_wheel
   # pip install -e .
 }

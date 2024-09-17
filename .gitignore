@@ -16,6 +16,7 @@ bin
 *.exe
 
 # Distribution / packaging
+__pycache__
 bin/
 .Python
 env/
