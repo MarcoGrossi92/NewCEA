@@ -1,4 +1,4 @@
-module CEAbox
+module CEA_module
   implicit none
   private
   !public:: CEAcopywrite
@@ -244,4 +244,4 @@ module CEAbox
 
   end subroutine CEAwrite
 
-end module CEAbox
+end module CEA_module

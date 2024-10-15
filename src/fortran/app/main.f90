@@ -1,5 +1,5 @@
 program CEAprogram
-  use CEAbox, only: obj_CEA
+  use CEA_module, only: obj_CEA
   implicit none
   type(obj_CEA) :: CEA
   character(len=500) :: filename

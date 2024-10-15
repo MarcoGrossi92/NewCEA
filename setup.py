@@ -9,10 +9,9 @@ setup(
         "NewCEA": ["*.so"],  # Include all .so files in the NewCEA package
     },
     include_package_data=True,
-    description="A package that includes a renamed shared object file and Python code",
-    author="Your Name",
-    author_email="your.email@example.com",
-    url="https://your.package.url",
+    description="A modern CEA interface for Fortran and Python codes",
+    author="Marco Grossi",
+    author_email="marco.grossi@uniroma1.it",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
