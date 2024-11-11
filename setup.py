@@ -3,6 +3,10 @@ from setuptools import setup, find_packages
 setup(
     name="NewCEA",
     version="1.0",
+    install_requires=[
+        "meson",
+        # other dependencies
+    ],
     packages=find_packages(where="src/python"),
     package_dir={'': 'src/python'},
     package_data={
