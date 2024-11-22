@@ -19,9 +19,6 @@ dependencies = [
     # other dependencies here
 ]
 
-[tool.setuptools]
-packages = ["NewCEA"]
-
 [tool.setuptools.packages.find]
 where = ["src/python"]
 

@@ -25,7 +25,7 @@ function usage () {
     echo "    Print this usage output and exit"
     echo
     echo "$PROGRAM --build  |-b <master>"
-    echo "    Build the project and libraries via CMake (<master> = standalone,chimera,hydra)"
+    echo "    Build the project and libraries via CMake (<master> = standalone,hydra)"
     echo
     echo "$PROGRAM --compile|-c <build>"
     echo "    Compile a program with a build type (<build> = RELEASE,DEBUG,TESTING)"
@@ -79,7 +79,6 @@ function compile () {
   make
 }
 
-EXE=0
 TYPE=0
 SETVARS=0
 BUILD=0
@@ -142,7 +141,7 @@ if [ "$SETVARS" != "0" ]; then
 elif [[ "$BUILD" != "0" ]]; then
   define_path
   build_project
-elif [[ "$EXE" != "0" ]]; then
+elif [[ "$TYPE" != "0" ]]; then
   compile
 else
   usage
