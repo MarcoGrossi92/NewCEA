@@ -24,8 +24,8 @@ function usage () {
     echo "$PROGRAM --help|-?"
     echo "    Print this usage output and exit"
     echo
-    echo "$PROGRAM --build  |-b <master>"
-    echo "    Build the project and libraries via CMake (<master> = standalone,hydra)"
+    echo "$PROGRAM --build  |-b"
+    echo "    Build the project and libraries via setup.py"
     echo
     echo "$PROGRAM --compile|-c <build>"
     echo "    Compile a program with a build type (<build> = RELEASE,DEBUG,TESTING)"
@@ -51,25 +51,41 @@ function define_path () {
 }
 
 function build_project () {
-  rm -rf bin build && mkdir -p build
+  rm -rf bin build src/python/NewCEA/FCEA2* && mkdir -p build
+
   if [[ $BUILD == standalone ]]; then
     echo 
     echo -e "\033[0;32mStand-alone building \033[0m"
     echo
     Master=None
+    # Determine the correct pip command
+    if command -v pip3 &> /dev/null; then
+        PIP_CMD="pip3"
+    elif command -v pip &> /dev/null; then
+        PIP_CMD="pip"
+    else
+        echo -e "\033[0;31mError: pip is not installed on this system.\033[0m"
+        exit 1
+    fi
+
+    # Install the package using pip
+    echo -e "\033[0;34mBuilding and installing NewCEA...\033[0m"
+    $PIP_CMD install -e . $VERBOSE
+    cd src/python/NewCEA
+    mv FCEA2*.so FCEA2.so
+    cd $DIR
+    echo -e "\033[0;32mInstallation completed successfully.\033[0m"
   fi
-  cd $DIR/build
-  cmake .. -DCMAKE_BUILD_TYPE=RELEASE
-  cmake --build .
 
-  cd $DIR
-  cd src/python/NewCEA
-  f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
-  mv FCEA2* FCEA2.so
-
+  # Manual building
+  # cd $DIR/build
+  # cmake .. -DCMAKE_BUILD_TYPE=RELEASE
+  # cmake --build .
   # cd $DIR
-  # python setup.py sdist bdist_wheel
-  # pip install -e .
+  # cd src/python/NewCEA
+  # f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
+  # mv FCEA2* FCEA2.so
+
 }
 
 function compile () {
@@ -79,18 +95,10 @@ function compile () {
   make
 }
 
+VERBOSE=0
 TYPE=0
 SETVARS=0
 BUILD=0
-
-# RETURN VALUES/EXIT STATUS CODES
-readonly E_BAD_OPTION=254
-
-# PROCESS COMMAND-LINE ARGUMENTS
-if [ $# -eq 0 ]; then
-  usage
-  exit 0
-fi
 
 while test $# -gt 0; do
   if [ x"$1" == x"--" ]; then
@@ -102,11 +110,7 @@ while test $# -gt 0; do
 
     --build | -b )
       shift
-      if (( $# > 0 )); then
-        BUILD=$1
-      else
-        BUILD=standalone
-      fi
+      BUILD=standalone
       ;;
 
     --compile | -c )
@@ -117,6 +121,11 @@ while test $# -gt 0; do
     --setvars | -s )
       shift
       SETVARS=1
+      ;;
+
+    --verbose | -v )
+      shift
+      VERBOSE="--verbose"
       ;;
 
     -? | --help )
@@ -135,6 +144,11 @@ while test $# -gt 0; do
       ;;
   esac
 done
+
+# PROCESS COMMAND-LINE ARGUMENTS
+if [[ $# -eq 0 && "$BUILD" == "0" ]]; then
+  usage
+fi
 
 if [ "$SETVARS" != "0" ]; then
   define_path
