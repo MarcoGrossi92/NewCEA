@@ -10,11 +10,11 @@ module CEA_module
     character(len=100):: more
   end type obj_propellant
 
-  type, public:: obj_species
+  type, public:: obj_CEA_species
     integer:: n
     real(8), dimension(:), allocatable:: massf, molef
     character(len=20), dimension(:), allocatable:: name
-  end type obj_species
+  end type obj_CEA_species
 
   type, public:: obj_CEA_out
     real(8):: temperature
@@ -29,7 +29,7 @@ module CEA_module
     real(8):: ivac
     real(8):: cstar
     real(8):: cf
-    type(obj_species):: species
+    type(obj_CEA_species):: species
   end type obj_CEA_out
 
   type, public:: obj_CEA
@@ -207,7 +207,7 @@ module CEA_module
     implicit none
     type(obj_CEA), intent(inout):: CEA
     character(len=*), intent(in):: what
-    type(obj_species), optional:: ONLYspecies
+    type(obj_CEA_species), optional:: ONLYspecies
     integer:: i, unitfile
 
     if (present(ONLYspecies)) CEA%only = .true.
