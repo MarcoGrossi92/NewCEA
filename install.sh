@@ -53,29 +53,26 @@ function define_path () {
 function build_project () {
   rm -rf bin build src/python/NewCEA/FCEA2* && mkdir -p build
 
-  if [[ $BUILD == standalone ]]; then
-    echo 
-    echo -e "\033[0;32mStand-alone building \033[0m"
-    echo
-    Master=None
-    # Determine the correct pip command
-    if command -v pip3 &> /dev/null; then
-        PIP_CMD="pip3"
-    elif command -v pip &> /dev/null; then
-        PIP_CMD="pip"
-    else
-        echo -e "\033[0;31mError: pip is not installed on this system.\033[0m"
-        exit 1
-    fi
-
-    # Install the package using pip
-    echo -e "\033[0;34mBuilding and installing NewCEA...\033[0m"
-    $PIP_CMD install -e . $VERBOSE
-    cd src/python/NewCEA
-    mv FCEA2*.so FCEA2.so
-    cd $DIR
-    echo -e "\033[0;32mInstallation completed successfully.\033[0m"
+  echo 
+  echo -e "\033[0;32mNewCEA building \033[0m"
+  echo
+  # Determine the correct pip command
+  if command -v pip3 &> /dev/null; then
+      PIP_CMD="pip3"
+  elif command -v pip &> /dev/null; then
+      PIP_CMD="pip"
+  else
+      echo -e "\033[0;31mError: pip is not installed on this system.\033[0m"
+      exit 1
   fi
+
+  # Install the package using pip
+  echo -e "\033[0;34mBuilding and installing NewCEA...\033[0m"
+  $PIP_CMD install -e . $VERBOSE
+  cd src/python/NewCEA
+  mv FCEA2*.so FCEA2.so
+  cd $DIR
+  echo -e "\033[0;32mInstallation completed successfully.\033[0m"
 
   # Manual building
   # cd $DIR/build
@@ -110,7 +107,7 @@ while test $# -gt 0; do
 
     --build | -b )
       shift
-      BUILD=standalone
+      BUILD=T
       ;;
 
     --compile | -c )

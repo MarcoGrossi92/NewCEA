@@ -34,7 +34,7 @@ class CustomBuildPy(build_py):
 
 setup(
     name="NewCEA",
-    version="1.0",
+    version="1.0.0",
     packages=find_packages(where="src/python"),
     package_dir={'': 'src/python'},
     package_data={
