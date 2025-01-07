@@ -64,7 +64,13 @@ class CEA:
         # Simulate calling an external CEA2 library (e.g. via ctypes, subprocess, or an external Python wrapper)
         # This example assumes the function returns data arrays
         spec_name, spec_frac, perfo, state = FCEA2.cea2(libpath, filename, self.indx)
-        spec_name = [name.decode('utf-8').strip() for name in spec_name]
+        good_spec_name = []
+        for name in spec_name:
+            try:
+                good_spec_name.append(name.decode('utf-8').strip())
+            except:
+                pass
+
 
         # Performance data
         self.SE.cstar, self.SE.cf, self.SE.ivac = perfo[0]
@@ -80,8 +86,8 @@ class CEA:
         self.FE.h0 = self.FE.h + 0.5 * (self.FE.Mach * self.FE.a) ** 2
 
         # Species composition
-        self.SE.species.n = len(spec_name)
-        self.SE.species.name = spec_name
+        self.SE.species.n = len(good_spec_name)
+        self.SE.species.name = good_spec_name
         self.SE.species.massf = spec_frac
 
         # Recompute the species fractions
