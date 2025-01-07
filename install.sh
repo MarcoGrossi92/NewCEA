@@ -28,7 +28,10 @@ function usage () {
     echo "    Build the project and libraries via setup.py"
     echo
     echo "$PROGRAM --compile|-c <build>"
-    echo "    Compile a program with a build type (<build> = RELEASE,DEBUG,TESTING)"
+    echo "    Compile the Fortran sources (<build> = RELEASE,DEBUG,TESTING)"
+    echo
+    echo "$PROGRAM --full-compile|-f <build>"
+    echo "    Compile the Fortran sources and update the python extension (<build> = RELEASE,DEBUG,TESTING)"
     echo
     echo "$PROGRAM --setvars|-s"
     echo "    Set the project paths in the environment variables"
@@ -50,8 +53,27 @@ function define_path () {
   source $RCFILE --force
 }
 
+function compile () {
+  echo -e "\033[0;34mBuilding Fortran sources via CMake...\033[0m"
+  mkdir -p $DIR/build
+  cd $DIR/build
+  cmake .. -DCMAKE_BUILD_TYPE=$TYPE
+  make
+}
+
+function full_compile () {
+  rm -rf src/python/NewCEA/FCEA2*
+  compile
+
+  echo -e "\033[0;34mBuilding Python extension with f2py...\033[0m"
+  cd $DIR
+  cd src/python/NewCEA
+  f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
+  mv FCEA2* FCEA2.so
+}
+
 function build_project () {
-  rm -rf bin build src/python/NewCEA/FCEA2* && mkdir -p build
+  rm -rf bin build
 
   echo 
   echo -e "\033[0;32mNewCEA building \033[0m"
@@ -66,36 +88,22 @@ function build_project () {
       exit 1
   fi
 
+  full_compile
+
   # Install the package using pip
-  echo -e "\033[0;34mBuilding and installing NewCEA...\033[0m"
+  echo -e "\033[0;34mInstalling NewCEA package...\033[0m"
   $PIP_CMD install -e . $VERBOSE
-  cd src/python/NewCEA
-  mv FCEA2*.so FCEA2.so
   cd $DIR
   echo -e "\033[0;32mInstallation completed successfully.\033[0m"
 
-  # Manual building
-  # cd $DIR/build
-  # cmake .. -DCMAKE_BUILD_TYPE=RELEASE
-  # cmake --build .
-  # cd $DIR
-  # cd src/python/NewCEA
-  # f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
-  # mv FCEA2* FCEA2.so
-
 }
 
-function compile () {
-  mkdir -p build
-  cd build
-  cmake .. -DCMAKE_BUILD_TYPE=$TYPE
-  make
-}
-
-VERBOSE=0
-TYPE=0
-SETVARS=0
-BUILD=0
+VERBOSE=F
+TYPE=F
+SETVARS=F
+COMPILE=F
+FCOMPILE=F
+BUILD=F
 
 while test $# -gt 0; do
   if [ x"$1" == x"--" ]; then
@@ -108,16 +116,24 @@ while test $# -gt 0; do
     --build | -b )
       shift
       BUILD=T
+      TYPE="RELEASE"
       ;;
 
     --compile | -c )
       shift
+      COMPILE=T
+      TYPE="$1"
+      ;;
+
+    --full-compile | -f )
+      shift
+      FCOMPILE=T
       TYPE="$1"
       ;;
 
     --setvars | -s )
       shift
-      SETVARS=1
+      SETVARS=T
       ;;
 
     --verbose | -v )
@@ -143,17 +159,19 @@ while test $# -gt 0; do
 done
 
 # PROCESS COMMAND-LINE ARGUMENTS
-if [[ $# -eq 0 && "$BUILD" == "0" ]]; then
+if [[ $# -eq 0 && "$BUILD" == "F" ]]; then
   usage
 fi
 
-if [ "$SETVARS" != "0" ]; then
+if [ "$SETVARS" != "F" ]; then
   define_path
-elif [[ "$BUILD" != "0" ]]; then
-  define_path
+elif [[ "$BUILD" != "F" ]]; then
+  #define_path
   build_project
-elif [[ "$TYPE" != "0" ]]; then
+elif [[ "$COMPILE" != "F" ]]; then
   compile
+elif [[ "$FCOMPILE" != "F" ]]; then
+  full_compile
 else
   usage
 fi
