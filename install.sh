@@ -166,7 +166,7 @@ fi
 if [ "$SETVARS" != "F" ]; then
   define_path
 elif [[ "$BUILD" != "F" ]]; then
-  #define_path
+  define_path
   build_project
 elif [[ "$COMPILE" != "F" ]]; then
   compile
