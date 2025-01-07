@@ -105,6 +105,11 @@ COMPILE=F
 FCOMPILE=F
 BUILD=F
 
+# PROCESS COMMAND-LINE ARGUMENTS
+if [[ $# -eq 0 ]]; then
+  usage
+fi
+
 while test $# -gt 0; do
   if [ x"$1" == x"--" ]; then
     # detect argument termination
@@ -157,11 +162,6 @@ while test $# -gt 0; do
       ;;
   esac
 done
-
-# PROCESS COMMAND-LINE ARGUMENTS
-if [[ $# -eq 0 && "$BUILD" == "F" ]]; then
-  usage
-fi
 
 if [ "$SETVARS" != "F" ]; then
   define_path
