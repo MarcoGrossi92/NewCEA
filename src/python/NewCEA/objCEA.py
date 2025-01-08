@@ -91,7 +91,7 @@ class CEA:
         self.SE.species.massf = spec_frac
 
         # Recompute the species fractions
-        self.recompute_fractions()
+        if (self.OG): self.recompute_fractions()
 
     def recompute_fractions(self):
         """
