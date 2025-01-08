@@ -42,8 +42,6 @@ class CustomBuildPy(build_py):
 
 
 setup(
-    name="NewCEA",
-    version="1.1.0",
     packages=find_packages(where="src/python"),
     package_dir={'': 'src/python'},
     package_data={
@@ -53,12 +51,4 @@ setup(
         "build_ext": CustomBuildExt,
         "build_py": CustomBuildPy,
     },
-    install_requires=["meson","ninja"],  # Other dependencies can go here
-    description="A modern CEA interface for Fortran and Python codes",
-    author="Marco Grossi",
-    author_email="marco.grossi@uniroma1.it",
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-    ],
 )

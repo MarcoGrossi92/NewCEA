@@ -1,0 +1,15 @@
+[project]
+name = "NewCEA"
+version = "1.0.0"
+description = "A modern CEA interface for Fortran and Python codes"
+authors = [{name = "Marco Grossi", email = "marco.grossi@uniroma1.it"}]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+dependencies = ["numpy", "meson", "ninja"]
+
+[build-system]
+requires = ["setuptools", "wheel", "numpy", "cmake", "meson", "ninja"]
+build-backend = "setuptools.build_meta"
