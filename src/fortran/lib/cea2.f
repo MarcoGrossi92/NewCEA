@@ -265,7 +265,7 @@ C INITIAL ESTIMATES
 
       perfo_ = perfo
       state_ = state
-      spec_name_ = ''
+      spec_name_ = 'GAME_OVER'
       spec_frac_ = 0.d0
       spec_name_(1:nspec) = spec_name
       spec_frac_(1:nspec) = spec_frac
@@ -3303,9 +3303,7 @@ C MASS OR MOLE FRACTIONS
       IF ( Eql ) THEN
         WRITE (IOOUT,99010) mamo
         notuse = 0
-        nspec = Ngc
-        allocate(spec_name(1:Ngc))
-        allocate(spec_frac(1:Ngc))
+        nspec = 0
         DO k = 1,Ngc
           kok = .TRUE.
           IF ( k.GT.Ng.AND.k.LT.Ngc.AND.Prod(k).EQ.Prod(k+1) ) THEN
@@ -3340,16 +3338,21 @@ C MASS OR MOLE FRACTIONS
           ENDDO
           IF ( kin.EQ.1 ) THEN
               WRITE (IOOUT,99011) Prod(k),(X(i),i=1,Npt)
-              spec_name(k) = Prod(k)
-              if (spec_name(k)(1:1)=='*')
-     &          spec_name(k) = spec_name(k)(2:)
-                spec_frac(k) = X(gsection)
+              nspec = nspec + 1
+              spec_name_dummy(nspec) = Prod(k)
+              if (spec_name_dummy(nspec)(1:1)=='*')
+     &          spec_name_dummy(nspec) = spec_name_dummy(nspec)(2:)
+                spec_frac_dummy(nspec) = X(gsection)
             IF ( Prod(k).EQ.Omit(notuse) ) notuse = notuse - 1
           ELSEIF ( Prod(k).NE.Prod(k-1) ) THEN
             notuse = notuse + 1
             Omit(notuse) = Prod(k)
           ENDIF
         ENDDO
+        allocate(spec_name(nspec))
+        allocate(spec_frac(nspec))
+        spec_name = spec_name_dummy(1:nspec)
+        spec_frac = spec_frac_dummy(1:nspec)
 
       ENDIF
       WRITE (IOOUT,99012) Tg(4)

@@ -64,13 +64,15 @@ module CEA_module
   end function libpath
 
   subroutine solve(self,filename)
+    use CEAinc, only: MAXNGC
     implicit none
     class(obj_CEA), intent(inout) :: self
     character(*), intent(inout) :: filename
     external :: cea2
     real(8) :: state(2,6), perfo(2,3)
-    real(8) :: spec_frac(600)
-    character(20) :: spec_name(600)
+    real(8) :: spec_frac(MAXNGC)
+    character(20) :: spec_name(MAXNGC)
+    integer :: i
 
     call cea2 (libpath(), filename, self%indx, spec_name, spec_frac, perfo, state)
 
@@ -88,13 +90,17 @@ module CEA_module
     self%FE%h0 = self%FE%h + 0.5d0*(self%FE%Mach*self%FE%a)**2.d0
 
     ! Composition
-    self%SE%species%n = 89
+    self%SE%species%n = 0
+    do i = 1, MAXNGC
+      if (spec_name(i)=='GAME_OVER') exit
+      self%SE%species%n = self%SE%species%n + 1
+    end do
     allocate(self%SE%species%name(1:self%SE%species%n))
     allocate(self%SE%species%massf(1:self%SE%species%n))
     self%SE%species%name = spec_name(1:self%SE%species%n)
     self%SE%species%massf = spec_frac(1:self%SE%species%n)
 
-    call self%recompute_fractions()
+    if (self%OG) call self%recompute_fractions()
 
   end subroutine solve
 

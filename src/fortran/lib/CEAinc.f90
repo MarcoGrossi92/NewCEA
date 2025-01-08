@@ -35,6 +35,9 @@ MODULE CEAinc
   INTEGER, PARAMETER :: IOPLT = 15
   INTEGER, PARAMETER :: IOTRN = 18
 
+  REAL*8 :: spec_frac_dummy(MAXNGC)
+  CHARACTER(20) :: spec_name_dummy(MAXNGC)
+
   REAL(8) :: Enn, Ennl, Enlsav, Ensave, Sumn
   REAL(8) :: Deln(MAXNGC), Enln(MAXNGC), Sln(MAXNGC)
   REAL(8) :: En(MAXNGC, NCOL)
