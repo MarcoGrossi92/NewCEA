@@ -3349,6 +3349,8 @@ C MASS OR MOLE FRACTIONS
             Omit(notuse) = Prod(k)
           ENDIF
         ENDDO
+        if (allocated(spec_name)) deallocate(spec_name)
+        if (allocated(spec_frac)) deallocate(spec_frac)
         allocate(spec_name(nspec))
         allocate(spec_frac(nspec))
         spec_name = spec_name_dummy(1:nspec)
@@ -4263,7 +4265,11 @@ C PCP ESTIMATES FOR AREA RATIOS
               appl = DSQRT(eln*(1.535d0+3.294d0*eln)) + pcplt
               GOTO 1100
             ELSE
-              IF ( Isup.GT.isup1.AND.Supar(Isup-1).GE.2. ) GOTO 850
+              ! 30 Jan 2025 - M. Grossi
+              ! Modification to prevent zero index of supar
+              IF ( Isup.GT.isup1) THEN
+                IF ( Supar(Isup-1).GE.2. ) GOTO 850
+              ENDIF
               appl = Gammas(nptth) + eln*1.4
               GOTO 1100
             ENDIF
