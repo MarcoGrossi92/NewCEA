@@ -7,6 +7,7 @@ PROGRAM=$(basename "$0")
 readonly DIR=$(pwd)
 VERBOSE=false
 BUILD_DIR="$DIR/build"
+project=NewCEA
 
 function usage() {
     cat <<EOF
@@ -25,7 +26,7 @@ Commands:
 
   compile                   Compile the program using the CMakePresets file
 
-  setvars                   Set project paths in environment variables
+  setvars                   Set $project paths in environment variables
 
 EOF
     exit 1
@@ -103,8 +104,8 @@ BUILD_TYPE="RELEASE"
 CMD=("build" "compile" "setvars")
 CMD_OPTIONS_build=("--compilers")
 
-# Parse options with getopts
-while getopts "hv:-:" opt; do
+# Parse global options
+while getopts "hv-:" opt; do
     case "$opt" in
         -)
             case "$OPTARG" in
@@ -115,7 +116,7 @@ while getopts "hv:-:" opt; do
             ;;
         h) usage ;;
         v) VERBOSE=true ;;
-        *) error "Unknown global option '-$opt'"; usage ;;
+        ?) error "Unknown global option '-$OPTARG'"; usage ;;
     esac
 done
 shift $((OPTIND -1))
@@ -163,46 +164,59 @@ case "$COMMAND" in
             exit 1
         fi
 
-        task "Compiling project"
+        task "Compiling $project"
         if [[ $COMPILERS == "intel" ]]; then 
-            log "Using Intel compilers"
             export FC="ifx"
         elif [[ $COMPILERS == "gnu" ]]; then 
-            log "Using GNU compilers"
             export FC="gfortran"
+        fi
+        log "Build dir: $BUILD_DIR"
+        log "Build type: $BUILD_TYPE"
+        if [[ -z "${FC+x}" ]]; then
+          log "Compilers not set. CMake will decide."
+        else
+          log "Compilers: FC=$FC"
         fi
         rm -rf $BUILD_DIR
         cmake -B $BUILD_DIR -DCMAKE_BUILD_TYPE=$BUILD_TYPE || exit 1
         cmake --build $BUILD_DIR || exit 1
+        log "[OK] Compilation successful"
 
         task "Write CMakePresets.json"
         write_presets
-
+        log "[OK] CMakePresets.json created"
+  
         task "Building Python extension with f2py"
         cd src/python/NewCEA
         f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
         mv FCEA2* FCEA2.so
+        log "[OK] Python conversion of CEA successful"
 
         task "Installing NewCEA package"
         $PIP_CMD install -e . $VERBOSE
         cd $DIR
+        log "[OK] NewCEA package installed"
 
         task "Defining environment variables"
         define_path
+        log "[OK] Environment variables defined"
         ;;
     compile)
-        task "Compiling project using CMakePresets"
+        task "Compiling $project using CMakePresets"
         cmake --preset default || exit 1
         cmake --build $BUILD_DIR || exit 1
+        log "[OK] Fortran compilation successful"
 
         task "Building Python extension with f2py"
         cd src/python/NewCEA
         f2py -c -m FCEA2 ../../fortran/lib/CEAinc.f90 ../../fortran/lib/cea2.f
         mv FCEA2* FCEA2.so
+        log "[OK] Python conversion of CEA successful"
         ;;
     setvars)
-        task "Setting project environment variables"
+        task "Setting $project environment variables"
         define_path
+        log "[OK] Environment variables defined"
         ;;
     *)
         error "Unknown command '$COMMAND'"
